@@ -5,7 +5,7 @@ import os
 import confuse
 import telebot
 
-projectRoot = os.path.dirname(os.path.dirname(__file__) + "/ProductsKK")
+projectRoot = os.path.dirname(os.path.abspath("config.yaml"))
 os.environ["PRODUCTSKKDIR"] = projectRoot
 
 config = confuse.Configuration('ProductsKK')
