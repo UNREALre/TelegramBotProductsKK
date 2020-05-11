@@ -23,6 +23,6 @@ def sendText(message):
     elif message.text.lower() == 'мяу':
         bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAINHV65UcH0-Qf80HIztYDHafoxf6F6AAJ1AAPZvGoaxRDGAz1iuPEZBA')
     else:
-        bot.send_message(message.chat.id, 'Что-что ?')
+        bot.send_message(message.chat.id, 'Зачем ты мне написал мне - ' + message.text.lower() + ' ?')
 
 bot.polling()
