@@ -1,0 +1,5 @@
+appName: ProductsKK
+logLevel: WARN
+
+tg:
+  key: 'TG_API_KEY'
