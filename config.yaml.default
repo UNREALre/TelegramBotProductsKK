@@ -1,5 +1,16 @@
 appName: ProductsKK
 logLevel: WARN
 
+db:
+  name: name
+  user: user
+  pass: pass
+  host: localhost
+  port: 27017
+
 tg:
-  key: 'TG_API_KEY'
+  key: 'key'
+
+resources:
+  csv: '/resources/csv/'
+  json: 'resources/json/'

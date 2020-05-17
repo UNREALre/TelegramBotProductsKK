@@ -1,32 +1,32 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
-import confuse
+from config import appConfig
 import telebot
+from pymongo import MongoClient
 
-projectRoot = os.path.dirname(os.path.abspath("config.yaml"))
-os.environ["PRODUCTSKKDIR"] = projectRoot
+bot = telebot.TeleBot(appConfig['tg']['key'].get())
 
-config = confuse.Configuration('ProductsKK')
+def generate_answer(event, user, message):
+    out = []
+    user_id = user.id
 
-bot = telebot.TeleBot(config['tg']['key'].get())
+    out.append("Привет!")
+
+    return out
 
 
 @bot.message_handler(commands=['start'])
-def startMessage(message):
+def start_message(message):
     bot.send_message(message.chat.id, 'Привет, ты написал мне /start')
 
 
-@bot.message_handler(content_types=['text'])
-def sendText(message):
-    userMessage = message.text.lower().encode('utf-8')
-    if userMessage == 'привет':
-        bot.send_message(message.chat.id, 'Привет!')
-    elif userMessage == 'мяу':
-        bot.send_sticker(message.chat.id, 'CAACAgIAAxkBAAINHV65UcH0-Qf80HIztYDHafoxf6F6AAJ1AAPZvGoaxRDGAz1iuPEZBA')
-    else:
-        bot.send_message(message.chat.id, 'Зачем ты мне написал мне - ' + userMessage + ' ?')
+@bot.message_handler(content_types=["text"])
+def send_text(message):
+    user_message = message.text.lower().encode("utf-8")
+    msgs = generate_answer("chat", message.from_user, user_message)
+    for msg in msgs:
+        bot.send_message(message.chat.id, msg)
 
 
 bot.polling()
