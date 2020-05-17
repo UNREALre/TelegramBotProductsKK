@@ -3,27 +3,38 @@
 
 from config import appConfig
 import telebot
-from pymongo import MongoClient
+from products import find_products, prepare_products
 
 bot = telebot.TeleBot(appConfig['tg']['key'].get())
+
 
 def generate_answer(event, user, message):
     out = []
     user_id = user.id
 
-    out.append("Привет!")
+    products = find_products(str(message))
+    msg = []
+    if products:
+        products = prepare_products(products)
+
+        for product in products:
+            msg.append('Продукт: %s. Калорийность: %s' % (product['description'], product['kk']))
+    else:
+        msg.append("Извини, я не могу найти продукт в базе. Попробуй ввести что-то еще. Не забывай, что пока я только знаю английский язык.")
+
+    out.append('\n'.join(msg))
 
     return out
 
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
-    bot.send_message(message.chat.id, 'Привет, ты написал мне /start')
+    bot.send_message(message.chat.id, 'Привет! Я помогу тебе узнать из чего состоит то, что ты ешь. Пока что я могу помочь тебе узнать только о количестве калорий в твоей еде. Напиши свой продукт на английском языке.')
 
 
 @bot.message_handler(content_types=["text"])
 def send_text(message):
-    user_message = message.text.lower().encode("utf-8")
+    user_message = message.text.lower()
     msgs = generate_answer("chat", message.from_user, user_message)
     for msg in msgs:
         bot.send_message(message.chat.id, msg)
