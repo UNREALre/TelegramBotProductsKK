@@ -94,8 +94,8 @@ file_to_collection = {
 
 fill_results = dict()
 for file_mask, collection_info in file_to_collection.items():
-    if file_mask != 'food_nutrient.csv':
-        continue
+    # if file_mask != 'food_nutrient.csv':
+    #    continue
 
     collection_of_file = collection_info['collection']
     collection_index = collection_info['index']
