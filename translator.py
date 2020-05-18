@@ -92,6 +92,7 @@ def update_translated():
 
     food_collection = db['food']
     for food in data:
+        print(food)
         food_collection.update_one({
             '_id': ObjectId(food['_id'])
         }, {
