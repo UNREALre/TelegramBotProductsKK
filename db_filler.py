@@ -45,25 +45,25 @@ def fill_collection(source_file, source_collection, source_collection_index):
     cur_file = open(join(csv_path, source_file))
     csv_reader = csv.DictReader(cur_file)
     for row in csv_reader:
-        if source_file == 'food.csv':
-            if row['data_type'] != "sr_legacy_food":  # выбираем только данный тип
-                continue
+        # if source_file == 'food.csv':
+        #    if row['data_type'] != "sr_legacy_food":  # выбираем только данный тип
+        #        continue
 
-        if source_file == 'food_nutrient.csv':
-            if not food_collection.find_one({"fdc_id": row["fdc_id"]}):
-                continue
+        # if source_file == 'food_nutrient.csv':
+        #    if not food_collection.find_one({"fdc_id": row["fdc_id"]}):
+        #        continue
 
         document = source_collection.find_one({source_collection_index: row[source_collection_index]})
         if not document:
             source_collection.insert_one(row)
             created += 1
-        else:
-            source_collection.update_one({
-                '_id': document['_id']
-            }, {
-                '$set': row
-            })
-            updated += 1
+        # else:
+        #    source_collection.update_one({
+        #        '_id': document['_id']
+        #    }, {
+        #        '$set': row
+        #    })
+        #    updated += 1
 
     return {'updated': updated, 'created': created}
 
@@ -94,8 +94,6 @@ file_to_collection = {
 
 fill_results = dict()
 for file_mask, collection_info in file_to_collection.items():
-    # if file_mask != 'food_nutrient.csv':
-    #    continue
 
     collection_of_file = collection_info['collection']
     collection_index = collection_info['index']
