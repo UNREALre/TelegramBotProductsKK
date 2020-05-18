@@ -44,6 +44,15 @@ def start_message(message):
     bot.send_message(message.chat.id, 'Привет! Я помогу тебе узнать из чего состоит то, что ты ешь. Пока что я могу помочь тебе узнать только о количестве калорий в твоей еде. Напиши свой продукт на английском языке.')
 
 
+@bot.message_handler(commands=['help'])
+def start_message(message):
+    bot.send_message(message.chat.id, '1. Напиши /start и я расскажу тебе о себе.\n'
+                                      '2. Напиши /top и я покажу тебе топ запросов пользователей.\n'
+                                      '3. Напиши название продукта и я попробую найти его калорийность.\n'
+                                      'Пока что на русский переведено примерно 30% базы. Поэтому пробуй как английские, так и русские названия еды.\n'
+                                      'Если есть что сказать/пожелать - пиши мне на webdevre@gmail.com или в ТГ: @UNREALre')
+
+
 @bot.message_handler(commands=['top'])
 def start_message(message):
     bot.send_message(message.chat.id, 'Топ 10 запросов пользователей за все время:')

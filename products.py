@@ -25,7 +25,7 @@ def find_products(name):
         #    ],
         #    '$text': {'$search': name}
         # },
-        {'$where': 'this.description.length < 20', '$text': {'$search': name}},
+        {'$where': 'this.description.length < 35', '$text': {'$search': name}},
         {'score': {'$meta': "textScore"}},
     ).limit(20)
     cursor.sort([('score', {'$meta': 'textScore'})])
