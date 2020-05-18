@@ -18,7 +18,14 @@ def find_products(name):
     """
     max_len = len(name) + 10
     cursor = food_collection.find(
-        {'$where': 'this.description_ru.length < ' + str(max_len), '$text': {'$search': name}},
+        # {
+        #    '$or': [
+        #        {'$where': 'this.description.length < ' + str(max_len)},
+        #        {'$where': 'this.description_ru.length < ' + str(max_len)},
+        #    ],
+        #    '$text': {'$search': name}
+        # },
+        {'$where': 'this.description.length < 20', '$text': {'$search': name}},
         {'score': {'$meta': "textScore"}},
     ).limit(20)
     cursor.sort([('score', {'$meta': 'textScore'})])
@@ -59,3 +66,4 @@ def test_search():
 
 
 #test_search()
+food_collection.create_index([('description', 'text'), ('description_ru', 'text')])
