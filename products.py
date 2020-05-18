@@ -66,4 +66,4 @@ def test_search():
 
 
 #test_search()
-food_collection.create_index([('description', 'text'), ('description_ru', 'text')])
+#food_collection.create_index([('description', 'text'), ('description_ru', 'text')])
