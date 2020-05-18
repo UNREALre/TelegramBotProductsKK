@@ -102,7 +102,8 @@ for file_mask, collection_info in file_to_collection.items():
 
     create_index(collection_of_file, collection_index)
     if file_mask == 'food.csv':
-        create_index(collection_of_file, 'description', True)
+        food_collection.drop_index('description')
+        create_index(collection_of_file, 'description_ru', True)
     if file_mask == 'food_nutrient.csv':
         food_nutrient_collection.create_index('fdc_id')
 

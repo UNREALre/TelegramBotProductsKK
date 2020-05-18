@@ -18,7 +18,7 @@ def find_products(name):
     """
     max_len = len(name) + 10
     cursor = food_collection.find(
-        {'$where': 'this.description.length < ' + str(max_len), '$text': {'$search': name}},
+        {'$where': 'this.description_ru.length < ' + str(max_len), '$text': {'$search': name}},
         {'score': {'$meta': "textScore"}},
     ).limit(20)
     cursor.sort([('score', {'$meta': 'textScore'})])
@@ -49,3 +49,12 @@ def prepare_products(db_products):
         })
 
     return prepared_products
+
+
+def test_search():
+    products = find_products("сыр")
+    for product in products:
+        print(product)
+
+
+#test_search()
