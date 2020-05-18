@@ -4,6 +4,7 @@
 from config import appConfig
 import telebot
 from products import find_products, prepare_products
+from logger import log_user_msgs
 
 bot = telebot.TeleBot(appConfig['tg']['key'].get())
 
@@ -34,6 +35,7 @@ def start_message(message):
 
 @bot.message_handler(content_types=["text"])
 def send_text(message):
+    log_user_msgs(message.text, message.from_user)
     user_message = message.text.lower()
     msgs = generate_answer("chat", message.from_user, user_message)
     for msg in msgs:

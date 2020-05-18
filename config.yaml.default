@@ -9,8 +9,12 @@ db:
   port: 27017
 
 tg:
-  key: 'key'
+  key: 'key1'
+
+yandex:
+  trans_key: 'key2'
 
 resources:
   csv: '/resources/csv/'
   json: 'resources/json/'
+  trans: 'translations/'

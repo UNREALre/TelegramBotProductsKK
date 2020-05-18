@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from config import db
-import re
 import pymongo
 
 food_collection = db['food']
@@ -17,7 +16,6 @@ def find_products(name):
     Получает наименование продукта
     Возвращает список продуктов с полной информацией из базы
     """
-    print(name)
     max_len = len(name) + 10
     cursor = food_collection.find(
         {'$where': 'this.description.length < ' + str(max_len), '$text': {'$search': name}},
