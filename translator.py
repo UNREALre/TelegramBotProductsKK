@@ -5,7 +5,6 @@ from config import db, appConfig
 from yandex_translate import YandexTranslate
 import json
 from os.path import join
-from bson import ObjectId
 
 translate = YandexTranslate([appConfig['yandex']['trans_key']])
 
@@ -59,13 +58,13 @@ def get_translated():
     cursor = food_collection.find({
         'description_ru': {'$exists': True}
     }, {
-       '_id': 1,
+       'fdc_id': 1,
        'description_ru': 1
     })
     foods = []
     for food in cursor:
         cur_food = {
-            '_id': str(food['_id']),
+            'fdc_id': food['fdc_id'],
             'description_ru': food['description_ru']
         }
         foods.append(cur_food)
@@ -93,7 +92,7 @@ def update_translated():
     food_collection = db['food']
     for food in data:
         food_collection.update_one({
-            '_id': ObjectId(food['_id'])
+            'fdc_id': food['fdc_id']
         }, {
             '$set': {
                 "description_ru": food['description_ru']
