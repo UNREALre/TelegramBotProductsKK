@@ -19,7 +19,7 @@ def generate_answer(event, user, message):
         products = prepare_products(products)
 
         for product in products:
-            msg.append('Продукт: %s. Калорийность: %s' % (product['description'], product['kk']))
+            msg.append('Продукт: %s (%s). Калорийность: %s' % (product['description_ru'], product['description'], product['kk']))
     else:
         msg.append("Извини, я не могу найти продукт в базе. Попробуй ввести что-то еще. Не забывай, что пока я только знаю английский язык.")
 
