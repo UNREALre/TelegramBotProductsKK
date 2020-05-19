@@ -2,3 +2,4 @@ confuse~=1.1.0
 pytelegrambotapi
 pymongo
 yandex.translate
+python-telegram-bot-pagination

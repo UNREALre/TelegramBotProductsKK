@@ -3,10 +3,15 @@
 
 from config import appConfig
 import telebot
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 from logger import log_user_msgs
 from generator import generate_answer
+from products import count_matched_documents
+import math
+from telegram_bot_pagination import InlineKeyboardPaginator
 
 bot = telebot.TeleBot(appConfig['tg']['key'].get())
+per_page = int(str(appConfig['app']['perPage']))
 
 
 @bot.message_handler(commands=['start'])
@@ -42,11 +47,64 @@ def start_message(message):
 
 
 @bot.message_handler(content_types=["text"])
-def send_text(message, page=1):
-    log_user_msgs(message.text, message.from_user)
-    user_message = message.text.lower()
-    msgs = generate_answer("chat", message.from_user, user_message, page)
-    bot.send_message(message.chat.id, msgs)
+def send_text(message, page=1, for_paging=False):
+    if not for_paging:
+        log_user_msgs(message.text, message.from_user)
+        user_message = message.text.lower()
+        chat_id = message.chat.id
+    else:
+        user_message, chat_id = message.split("~")
+
+    msgs = generate_answer("chat", user_message, page)
+
+    total = count_matched_documents(user_message)
+
+    # markup = generate_pages(total, page, user_message)
+    # bot.send_message(
+    #    message.chat.id,
+    #    msgs,
+    #    reply_markup=markup
+    # )
+
+    if total > per_page:
+        paginator = InlineKeyboardPaginator(
+            math.ceil(total / per_page),
+            current_page=page,
+            data_pattern=user_message+'~'+str(chat_id)+'#{page}'
+        )
+
+    bot.send_message(
+        chat_id,
+        msgs,
+        reply_markup=paginator.markup if total > per_page else [],
+        parse_mode='Markdown'
+    )
+
+
+@bot.callback_query_handler(func=lambda call: True)
+def callback_query(call):
+    call_data = call.data.split("#")
+    user_message = call_data[0]
+    page = int(call_data[1])
+
+    send_text(user_message, page, True)
+
+
+def generate_pages(total, page, message):
+    """
+    НЕ ИСПОЛЬЗУЕТСЯ
+    Получает количество документов запроса и текущую активную страницу
+    Возвращает разметку для кнопок пагинаций
+    """
+    total = math.ceil(total / per_page)
+    total = 10
+
+    markup = InlineKeyboardMarkup()
+    markup.row_width = 10
+    for i in range(1, total):
+        markup.add(InlineKeyboardButton(i, callback_data=("%s#%s" % (message, i))))
+
+    return markup
 
 
 bot.polling()

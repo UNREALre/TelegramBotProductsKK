@@ -1,13 +1,15 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from config import appConfig
 from products import find_products, prepare_products
 from stats import get_top_10_requests
 
+per_page = int(str(appConfig['app']['perPage']))
 
-def generate_answer(event, user, message, page=1):
+
+def generate_answer(event, message, page=1):
     out = []
-    #user_id = user.id
 
     if event == "chat":
         msg = []

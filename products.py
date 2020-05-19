@@ -41,7 +41,7 @@ def find_products(name, page=1):
             'field_length': {'$strLenCP': '$description'}
         }},
         {'$sort': {'field_length': 1}},
-        {'$skip': page * per_page},
+        {'$skip': (page-1) * per_page},
         {'$limit': per_page}
     ])
     cur_products = []
