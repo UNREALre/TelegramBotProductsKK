@@ -20,4 +20,4 @@ resources:
   trans: 'translations/'
 
 app:
-  perPage: 20
+  perPage: 10
