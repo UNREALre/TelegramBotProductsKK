@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from config import db
-import pymongo
 
 food_collection = db['food']
 food_categories_collection = db['food_category']
@@ -58,12 +57,3 @@ def prepare_products(db_products):
 
     return prepared_products
 
-
-def test_search():
-    products = find_products("сыр")
-    for product in products:
-        print(product)
-
-
-#test_search()
-#food_collection.create_index([('description', 'text'), ('description_ru', 'text')])
