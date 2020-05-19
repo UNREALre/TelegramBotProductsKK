@@ -1,14 +1,13 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from config import db
-from products import find_products
+from generator import generate_answer
 
 
 def test_search(name):
-    products = find_products(name)
-    for product in products:
-        print(product['fdc_id'], product['description'], sep='; ')
+    msgs = generate_answer("chat", {}, name)
+    for msg in msgs:
+        print(msg)
 
 
 test_search("сыр")

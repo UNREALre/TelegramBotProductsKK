@@ -51,7 +51,7 @@ def prepare_products(db_products):
             '_id': cur_product['_id'],
             'fdc_id': cur_product['fdc_id'],
             'description': cur_product['description'],
-            'description_ru': cur_product['description_ru'],
+            # 'description_ru': cur_product['description_ru'],
             'kk': cur_product['nutrient']['amount']
         })
 
