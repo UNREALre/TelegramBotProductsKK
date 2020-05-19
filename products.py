@@ -1,19 +1,22 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from config import db
+from config import db, appConfig
 
 food_collection = db['food']
 food_categories_collection = db['food_category']
 food_nutrient_collection = db['food_nutrient']
 nutrient_collection = db['nutrient']
+per_page = int(str(appConfig['app']['perPage']))
 
 
-def find_products(name):
+def find_products(name, page=1):
     """
     Ищет все данные по продукту в базе
     Получает наименование продукта
     Возвращает список продуктов с полной информацией из базы
+    """
+
     """
     max_len = len(name) + 10
     cursor = food_collection.find(
@@ -24,10 +27,23 @@ def find_products(name):
         #    ],
         #    '$text': {'$search': name}
         # },
-        {'$where': 'this.description.length < 35', '$text': {'$search': name}},
+        #{'$where': 'this.description.length < 35', '$text': {'$search': name}},
+        {'$text': {'$search': name}},
         {'score': {'$meta': "textScore"}},
-    ).limit(20)
+    ).limit(per_page)
     cursor.sort([('score', {'$meta': 'textScore'})])
+    """
+    cursor = food_collection.aggregate([
+        {'$match': {'$text': {'$search': name}}},
+        {'$project': {
+            'fdc_id': 1,
+            'description': 1,
+            'field_length': {'$strLenCP': '$description'}
+        }},
+        {'$sort': {'field_length': 1}},
+        {'$skip': page * per_page},
+        {'$limit': per_page}
+    ])
     cur_products = []
     for cur_product in cursor:
         nutrients = food_nutrient_collection.find(
@@ -39,6 +55,16 @@ def find_products(name):
         cur_products.append(cur_product)
 
     return cur_products
+
+
+def count_matched_documents(name):
+    """
+    Получает запрос
+    Возвращает количество документов, удовлетворяющих запросу
+    """
+    return food_collection.find(
+        {'$text': {'$search': name}}
+    ).count()
 
 
 def prepare_products(db_products):

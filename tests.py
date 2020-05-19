@@ -10,11 +10,10 @@ def test_search(name):
         print(msg)
 
 
-test_search("сыр")
-print("===================")
-test_search("Mars")
-print("===================")
-test_search("Snickers")
-print("===================")
+name = input()
+while name != "0":
+    test_search(name)
+    print("===================")
+    name = input()
 
 #food_collection.create_index([('description', 'text'), ('description_ru', 'text')])

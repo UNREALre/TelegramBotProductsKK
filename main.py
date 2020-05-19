@@ -6,7 +6,6 @@ import telebot
 from logger import log_user_msgs
 from generator import generate_answer
 
-
 bot = telebot.TeleBot(appConfig['tg']['key'].get())
 
 
@@ -30,7 +29,8 @@ def start_message(message):
 
 @bot.message_handler(commands=['news'])
 def start_message(message):
-    bot.send_message(message.chat.id, '1. 18.05.2020 Выпущена 1 версия бота.\n')
+    bot.send_message(message.chat.id, '1. 18.05.2020 Выпущена 1 версия бота.\n'
+                                      '2. 19.05.2020 Отказ от локализации русской. Бот понимает только EN. Добавлено поле 200 тысяч брендированных товаров. Оптимизирован поиск.')
 
 
 @bot.message_handler(commands=['top'])
@@ -42,12 +42,11 @@ def start_message(message):
 
 
 @bot.message_handler(content_types=["text"])
-def send_text(message):
+def send_text(message, page=1):
     log_user_msgs(message.text, message.from_user)
     user_message = message.text.lower()
-    msgs = generate_answer("chat", message.from_user, user_message)
-    for msg in msgs:
-        bot.send_message(message.chat.id, msg)
+    msgs = generate_answer("chat", message.from_user, user_message, page)
+    bot.send_message(message.chat.id, msgs)
 
 
 bot.polling()

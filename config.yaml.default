@@ -18,3 +18,6 @@ resources:
   csv: '/resources/csv/'
   json: 'resources/json/'
   trans: 'translations/'
+
+app:
+  perPage: 20
